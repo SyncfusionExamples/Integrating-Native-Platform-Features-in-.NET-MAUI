@@ -49,7 +49,7 @@ namespace NativeFeaturesMAUI
         /// subject to device and user settings. No-ops on older versions.
         /// </summary>
         /// <param name="ctx">Application context.</param>
-        static void EnsureChannel(Context ctx)
+        private static void EnsureChannel(Context ctx)
         {
             if (_channelReady)
             {
