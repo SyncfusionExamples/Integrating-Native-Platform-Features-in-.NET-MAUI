@@ -1,8 +1,8 @@
 # Integrating-Native-Platform-Features-in-.NET-MAUI
-This demo shows how to access native capabilities camera, location, toasts, vibration, sensors in your .NET MAUI apps with simple examples and clear explanations.
 
 ## Overview
 
+This blog shows how to use basic native features in a .NET MAUI app without writing separate code for each platform. It includes small examples for getting the device model, using platform‑specific services, handling permissions, and accessing native APIs through simple interfaces. The goal is to help you understand how to connect shared MAUI code with Android, iOS, Windows, or macOS features in a clear and easy way.
 
 ## Interface and Dependency Injection
 
