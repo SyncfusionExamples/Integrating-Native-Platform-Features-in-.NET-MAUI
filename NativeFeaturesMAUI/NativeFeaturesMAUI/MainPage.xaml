@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NativeFeaturesMAUI.MainPage"
+             Shell.NavBarIsVisible="True"
+             BackgroundColor="{AppThemeBinding Light=#F7F7FB, Dark=#0F0F10}">
+
+    <ContentPage.Resources>
+        <Color x:Key="CardBgLight">#FFFFFF</Color>
+        <Color x:Key="CardBgDark">#1C1C1E</Color>
+        <Color x:Key="CardStrokeLight">#E5E6EB</Color>
+        <Color x:Key="CardStrokeDark">#2B2B2E</Color>
+        <Color x:Key="PrimaryTextLight">#111827</Color>
+        <Color x:Key="PrimaryTextDark">#E5E7EB</Color>
+        <Color x:Key="SecondaryTextLight">#6B7280</Color>
+        <Color x:Key="SecondaryTextDark">#9CA3AF</Color>
+        <Color x:Key="Accent">#635BFF</Color>
+
+        <!-- Card container style -->
+        <Style TargetType="Border" x:Key="FeatureCard">
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light={StaticResource CardBgLight}, Dark={StaticResource CardBgDark}}"/>
+            <Setter Property="Stroke"
+                    Value="{AppThemeBinding Light={StaticResource CardStrokeLight}, Dark={StaticResource CardStrokeDark}}"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="14"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="#000000" Opacity="0.12" Radius="8" Offset="0,3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Icon text style -->
+        <Style TargetType="Label" x:Key="IconLabel">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <!-- Title / subtitle labels in each card -->
+        <Style TargetType="Label" x:Key="CardTitle">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+        </Style>
+        <Style TargetType="Label" x:Key="CardSubtitle">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <!-- Header -->
+            <Label Text="Integrating Native Platform Features"
+                   FontSize="22" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+            <Label Text="Try device features using a simple dashboard."
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
+
+            <FlexLayout Wrap="Wrap" Direction="Row" AlignItems="Start" JustifyContent="Start">
+                <FlexLayout.Resources>
+                    <OnIdiom x:Key="CardWidth" x:TypeArguments="x:Double"
+                             Phone="160" Tablet="200" Desktop="220"/>
+                </FlexLayout.Resources>
+                
+                <!-- Take Photo -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📸" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Take Photo" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Open the native camera" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTakePhotoClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Pick File -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📁" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Pick File" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="System file picker" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPickFileClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Get Location -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📍" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Get Location" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Latitude longitude" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGetLocationClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Vibrate -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📳" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Vibrate" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Haptic feedback" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnVibrateClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Toast / Alert -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="🔔" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Toast / Alert" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Platform-specific UI" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnToastClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Device Model -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📱" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Device Model" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="From native API" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDeviceModelClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Orientation -->
+                <Border Style="{StaticResource FeatureCard}"
+                        WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="🔄" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Orientation" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Read via platform code" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnOrientationClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Network -->
+                <Border Style="{StaticResource FeatureCard}" WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📶" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Network" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Online / Profile" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNetworkClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Accelerometer -->
+                <Border x:Name="AccelCard" Style="{StaticResource FeatureCard}" WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="📈" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Accelerometer" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Start / Stop readings" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAccelerometerClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- Compass -->
+                <Border x:Name="CompassCard" Style="{StaticResource FeatureCard}" WidthRequest="{StaticResource CardWidth}">
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.RowSpan="2" Grid.Column="0" Text="🧭" Style="{StaticResource IconLabel}"/>
+                        <Label Grid.Column="1" Text="Compass" Style="{StaticResource CardTitle}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Heading (°)" Style="{StaticResource CardSubtitle}"/>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCompassClicked"/>
+                    </Border.GestureRecognizers>
+                </Border>
+            </FlexLayout>
+
+            <!-- Preview -->
+            <Border Style="{StaticResource FeatureCard}">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
+                    <!-- Section header -->
+                    <Label Text="Output"
+                           FontAttributes="Bold"
+                           FontSize="16"
+                           TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+
+                    <!-- Status chips -->
+                    <HorizontalStackLayout Grid.Row="1" Spacing="8">
+                        <Border StrokeThickness="0" BackgroundColor="#EEF2FF" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipLastAction" Text="—" Padding="10,4" TextColor="#3730A3" />
+                        </Border>
+                        <Border StrokeThickness="0" BackgroundColor="#ECFDF5" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipState" Text="Ready" Padding="10,4" TextColor="#065F46" />
+                        </Border>
+                        <Border StrokeThickness="0" BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipTime" Text="—" Padding="10,4" TextColor="#9A3412" />
+                        </Border>
+                    </HorizontalStackLayout>
+
+                    <!-- Text output -->
+                    <Label Grid.Row="2" x:Name="Output" LineBreakMode="WordWrap"
+                           TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
+
+                    <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12">
+                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F1F5F9" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8" Padding="10,8" IsVisible="False" x:Name="FileChip">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="📁" />
+                                <Label x:Name="FileNameLabel" Text="No file" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Row 0: Location summary -->
+                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F1F5F9" StrokeThickness="0"
+        StrokeShape="RoundRectangle 8" Padding="10,8" IsVisible="False" x:Name="LocationChip">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="📍"/>
+                                <Label x:Name="LocationLabel" FontSize="12" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Row 0: Photo preview -->
+                        <Border Grid.Row="0" Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#111}"
+                                StrokeThickness="0" StrokeShape="RoundRectangle 10" Padding="6" IsVisible="False" x:Name="PhotoCard">
+                            <Image x:Name="Photo" HeightRequest="120" WidthRequest="160" Aspect="AspectFill"/>
+                        </Border>
+
+                        <!-- Network chip -->
+                        <Border Grid.Row="1" Grid.Column="0"
+        Margin="0,6,0,0"
+        BackgroundColor="#EEF2FF" StrokeThickness="0"
+        StrokeShape="RoundRectangle 8" Padding="10,8"
+        x:Name="NetworkChip" IsVisible="True">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="📶"/>
+                                <Label x:Name="NetworkLabel" Text="Checking network…"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Accelerometer chip -->
+                        <Border Grid.Row="1" Grid.Column="1"
+        Margin="0,6,0,0"
+        BackgroundColor="#ECFDF5" StrokeThickness="0"
+        StrokeShape="RoundRectangle 8" Padding="10,8"
+        x:Name="AccelChip" IsVisible="False">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="📈 Accelerometer" FontAttributes="Bold" FontSize="12"/>
+                                <Label x:Name="AccelLabel" FontSize="12" Text="X 0.00  Y 0.00  Z 0.00"/>
+                                <Label x:Name="ShakeLabel" FontSize="12" Text="Shake: —"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Compass chip -->
+                        <Border Grid.Row="1" Grid.Column="2"
+        Margin="0,6,0,0"
+        BackgroundColor="#FFF7ED" StrokeThickness="0"
+        StrokeShape="RoundRectangle 8" Padding="10,8"
+        x:Name="CompassChip" IsVisible="False">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="🧭 Compass" FontAttributes="Bold" FontSize="12"/>
+                                <Label x:Name="CompassLabel" FontSize="12" Text="Heading: —°"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+
+                    <!-- Activity log -->
+                    <VerticalStackLayout Grid.Row="4" Spacing="6">
+                        <Label Text="Recent activity" FontAttributes="Bold" FontSize="13"
+                               TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+                        <CollectionView x:Name="EventsList" HeightRequest="110">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="6"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeThickness="0" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 8" Padding="8">
+                                        <Label Text="{Binding}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
