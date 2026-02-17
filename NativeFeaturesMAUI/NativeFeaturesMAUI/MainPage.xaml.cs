@@ -4,10 +4,10 @@ namespace NativeFeaturesMAUI
 {
     public partial class MainPage : ContentPage
     {
-        private readonly IToastService? _toast;
-        private readonly ObservableCollection<string> _events = new();
-        private bool _accelActive = false;
-        private bool _compassActive = false;
+        private readonly IToastService? _toastService;
+        private readonly ObservableCollection<string> _eventLog = new();
+        private bool _isAccelerometerActive;
+        private bool _isCompassActive;
 
         /// <summary>
         /// Initializes UI components, resolves services, toggles platform-specific UI,
@@ -17,50 +17,21 @@ namespace NativeFeaturesMAUI
         {
             InitializeComponent();
 
-            _toast = Application.Current?.Handler?.MauiContext?.Services.GetService<IToastService>();
-            // Enable accelerometer/compass UI only on mobile platforms
-            if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                if (AccelCard != null)
-                {
-                    AccelCard.IsVisible = true;
-                }
-                if (CompassCard != null)
-                {
-                    CompassCard.IsVisible = true;
-                }
-            }
-            else
-            {
-                if (AccelCard != null)
-                {
-                    AccelCard.IsVisible = false;
-                }
-                if (CompassCard != null)
-                {
-                    CompassCard.IsVisible = false;
-                }
-            }
+            _toastService = Application.Current?.Handler?.MauiContext?.Services.GetService<IToastService>();
+            bool isMobile = DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS;
 
-            if (EventsList != null)
+            SetVisible(AccelCard, isMobile);
+            SetVisible(CompassCard, isMobile);
+
+            if (EventsList is not null)
             {
-                EventsList.ItemsSource = _events;
+                EventsList.ItemsSource = _eventLog;
             }
 
             SetState("Ready", "App started");
-            if (PhotoCard != null)
-            {
-                PhotoCard.IsVisible = false;
-            }
-            if (FileChip != null)
-            {
-                FileChip.IsVisible = false;
-            }
-            if (LocationChip != null)
-            {
-                LocationChip.IsVisible = false;
-            }
-
+            SetVisible(PhotoCard, false);
+            SetVisible(FileChip, false);
+            SetVisible(LocationChip, false);
             RefreshNetworkStatus();
         }
 
@@ -73,29 +44,21 @@ namespace NativeFeaturesMAUI
         /// <param name="detail">Optional detail text displayed in the Output label.</param>
         private void SetState(string state, string action, string? detail = null)
         {
-            if (ChipState != null)
-            {
-                ChipState.Text = state;
-            }
-            if (ChipLastAction != null)
-            {
-                ChipLastAction.Text = action;
-            }
-            if (ChipTime != null)
-            {
-                ChipTime.Text = DateTime.Now.ToString("HH:mm:ss");
-            }
+            SetText(ChipState, state);
+            SetText(ChipLastAction, action);
+            SetText(ChipTime, DateTime.Now.ToString("HH:mm:ss"));
 
-            if (!string.IsNullOrWhiteSpace(detail) && Output != null)
+            if (!string.IsNullOrWhiteSpace(detail))
             {
-                Output.Text = detail;
+                SetText(Output, detail!);
             }
 
             var entry = $"{DateTime.Now:HH:mm:ss} • {action} → {state}{(string.IsNullOrEmpty(detail) ? "" : $" · {detail}")}";
-            _events.Insert(0, entry);
-            while (_events.Count > 8)
+            _eventLog.Insert(0, entry);
+
+            while (_eventLog.Count > 8)
             {
-                _events.RemoveAt(_events.Count - 1);
+                _eventLog.RemoveAt(_eventLog.Count - 1);
             }
         }
 
@@ -108,14 +71,10 @@ namespace NativeFeaturesMAUI
         {
             try
             {
-                // If running on MacCatalyst or a virtual device, capture isn't supported
                 if (DeviceInfo.Platform == DevicePlatform.MacCatalyst || DeviceInfo.DeviceType == DeviceType.Virtual)
                 {
                     SetState("Unsupported", "Take Photo", "Capture not supported on this device.");
-                    if (PhotoCard != null)
-                    {
-                        PhotoCard.IsVisible = false;
-                    }
+                    SetVisible(PhotoCard, false);
                     return;
                 }
 
@@ -123,10 +82,7 @@ namespace NativeFeaturesMAUI
                 if (status != PermissionStatus.Granted)
                 {
                     SetState("Denied", "Take Photo", "Camera permission not granted.");
-                    if (PhotoCard != null)
-                    {
-                        PhotoCard.IsVisible = false;
-                    }
+                    SetVisible(PhotoCard, false);
                     return;
                 }
 
@@ -134,52 +90,32 @@ namespace NativeFeaturesMAUI
                 if (photo is null)
                 {
                     SetState("Cancelled", "Take Photo");
-                    if (PhotoCard != null)
-                    {
-                        PhotoCard.IsVisible = false;
-                    }
+                    SetVisible(PhotoCard, false);
                     return;
                 }
 
                 await using var read = await photo.OpenReadAsync();
-                var ms = new MemoryStream();
+                var ms = new System.IO.MemoryStream();
                 await read.CopyToAsync(ms);
                 ms.Position = 0;
 
-                if (Photo != null)
-                {
+                if (Photo is not null)
                     Photo.Source = ImageSource.FromStream(() => ms);
-                }
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = true;
-                }
 
+                SetVisible(PhotoCard, true);
                 SetState("Success", "Take Photo", $"Captured: {photo.FileName}");
 
-                if (FileChip != null)
-                {
-                    FileChip.IsVisible = false;
-                }
-                if (LocationChip != null)
-                {
-                    LocationChip.IsVisible = false;
-                }
+                SetVisible(FileChip, false);
+                SetVisible(LocationChip, false);
             }
             catch (FeatureNotSupportedException)
             {
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = false;
-                }
+                SetVisible(PhotoCard, false);
                 SetState("Unsupported", "Take Photo", "Capture not supported on this device.");
             }
             catch (Exception ex)
             {
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = false;
-                }
+                SetVisible(PhotoCard, false);
                 SetState("Error", "Take Photo", ex.Message);
             }
         }
@@ -195,40 +131,20 @@ namespace NativeFeaturesMAUI
                 var result = await FilePicker.PickAsync(new PickOptions { PickerTitle = "Select a file" });
                 if (result is null)
                 {
-                    if (FileChip != null)
-                    {
-                        FileChip.IsVisible = false;
-                    }
+                    SetVisible(FileChip, false);
                     SetState("Cancelled", "Pick File");
                     return;
                 }
 
-                if (FileNameLabel != null)
-                {
-                    FileNameLabel.Text = result.FileName;
-                }
-                if (FileChip != null)
-                {
-                    FileChip.IsVisible = true;
-                }
-
+                SetText(FileNameLabel, result.FileName);
+                SetVisible(FileChip, true);
                 SetState("Success", "Pick File", $"Picked: {result.FileName}");
-
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = false;
-                }
-                if (LocationChip != null)
-                {
-                    LocationChip.IsVisible = false;
-                }
+                SetVisible(PhotoCard, false);
+                SetVisible(LocationChip, false);
             }
             catch (Exception ex)
             {
-                if (FileChip != null)
-                {
-                    FileChip.IsVisible = false;
-                }
+                SetVisible(FileChip, false);
                 SetState("Error", "Pick File", ex.Message);
             }
         }
@@ -244,10 +160,7 @@ namespace NativeFeaturesMAUI
                 var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                 if (status != PermissionStatus.Granted)
                 {
-                    if (LocationChip != null)
-                    {
-                        LocationChip.IsVisible = false;
-                    }
+                    SetVisible(LocationChip, false);
                     SetState("Denied", "Get Location", "Location permission not granted.");
                     return;
                 }
@@ -257,41 +170,25 @@ namespace NativeFeaturesMAUI
 
                 if (location is null)
                 {
-                    if (LocationChip != null)
-                    {
-                        LocationChip.IsVisible = false;
-                    }
+                    SetVisible(LocationChip, false);
                     SetState("Unavailable", "Get Location", "No location returned.");
                     return;
                 }
 
-                if (LocationLabel != null)
-                {
-                    LocationLabel.Text = $"Lat {location.Latitude:F5}, Lon {location.Longitude:F5} · Acc {location.Accuracy} m";
-                }
+                SetText(
+                    LocationLabel,
+                    $"Lat {location.Latitude:F5}, Lon {location.Longitude:F5} · Acc {location.Accuracy} m"
+                );
 
-                if (LocationChip != null)
-                {
-                    LocationChip.IsVisible = true;
-                }
-
+                SetVisible(LocationChip, true);
                 SetState("Success", "Get Location", $"Lat {location.Latitude:F5}, Lon {location.Longitude:F5}");
 
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = false;
-                }
-                if (FileChip != null)
-                {
-                    FileChip.IsVisible = false;
-                }
+                SetVisible(PhotoCard, false);
+                SetVisible(FileChip, false);
             }
             catch (Exception ex)
             {
-                if (LocationChip != null)
-                {
-                    LocationChip.IsVisible = false;
-                }
+                SetVisible(LocationChip, false);
                 SetState("Error", "Get Location", ex.Message);
             }
         }
@@ -306,18 +203,9 @@ namespace NativeFeaturesMAUI
             {
                 Vibration.Default.Vibrate(TimeSpan.FromSeconds(1));
                 SetState("Success", "Vibrate", "Haptic feedback triggered.");
-                if (PhotoCard != null)
-                {
-                    PhotoCard.IsVisible = false;
-                }
-                if (FileChip != null)
-                {
-                    FileChip.IsVisible = false;
-                }
-                if (LocationChip != null)
-                {
-                    LocationChip.IsVisible = false;
-                }
+                SetVisible(PhotoCard, false);
+                SetVisible(FileChip, false);
+                SetVisible(LocationChip, false);
             }
             catch (FeatureNotSupportedException)
             {
@@ -337,13 +225,13 @@ namespace NativeFeaturesMAUI
         {
             try
             {
-                if (_toast is null)
+                if (_toastService is null)
                 {
                     SetState("Error", "Toast / Alert", "IToastService not resolved. Check DI registrations.");
                     return;
                 }
 
-                await _toast.ShowAsync("Hello from native UI!");
+                await _toastService.ShowAsync("Hello from native UI!");
                 SetState("Success", "Toast / Alert", "System notification posted.");
             }
             catch (Exception ex)
@@ -360,19 +248,9 @@ namespace NativeFeaturesMAUI
         {
             var model = DeviceModelService.Model();
             SetState("Success", "Device Model", model);
-
-            if (PhotoCard != null)
-            {
-                PhotoCard.IsVisible = false;
-            }
-            if (FileChip != null)
-            {
-                FileChip.IsVisible = false;
-            }
-            if (LocationChip != null)
-            {
-                LocationChip.IsVisible = false;
-            }
+            SetVisible(PhotoCard, false);
+            SetVisible(FileChip, false);
+            SetVisible(LocationChip, false);
         }
 
         /// <summary>
@@ -383,19 +261,9 @@ namespace NativeFeaturesMAUI
         {
             var value = PlatformOrientationService.GetOrientation();
             SetState("Success", "Orientation", value);
-
-            if (PhotoCard != null)
-            {
-                PhotoCard.IsVisible = false;
-            }
-            if (FileChip != null)
-            {
-                FileChip.IsVisible = false;
-            }
-            if (LocationChip != null)
-            {
-                LocationChip.IsVisible = false;
-            }
+            SetVisible(PhotoCard, false);
+            SetVisible(FileChip, false);
+            SetVisible(LocationChip, false);
         }
 
         /// <summary>
@@ -416,15 +284,9 @@ namespace NativeFeaturesMAUI
             var access = Connectivity.Current.NetworkAccess;
             var profiles = Connectivity.Current.ConnectionProfiles;
 
-            string profileText = string.Empty;
-            if (profiles.Contains(ConnectionProfile.WiFi))
-            {
-                profileText = " · Wi‑Fi";
-            }
-            else if (profiles.Contains(ConnectionProfile.Cellular))
-            {
-                profileText = " · Cellular";
-            }
+            string profileText =
+                profiles.Contains(ConnectionProfile.WiFi) ? " · Wi‑Fi" :
+                profiles.Contains(ConnectionProfile.Cellular) ? " · Cellular" : string.Empty;
 
             string status = access switch
             {
@@ -435,10 +297,7 @@ namespace NativeFeaturesMAUI
                 _ => "Unknown"
             };
 
-            if (NetworkLabel != null)
-            {
-                NetworkLabel.Text = status + ((status == "Online") ? profileText : string.Empty);
-            }
+            SetText(NetworkLabel, status + (status == "Online" ? profileText : string.Empty));
         }
 
         /// <summary>
@@ -457,14 +316,10 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private void OnAccelerometerClicked(object sender, EventArgs e)
         {
-            if (!_accelActive)
-            {
+            if (!_isAccelerometerActive)
                 StartAccelerometer();
-            }
             else
-            {
                 StopAccelerometer();
-            }
         }
 
         /// <summary>
@@ -479,15 +334,12 @@ namespace NativeFeaturesMAUI
                 return;
             }
 
-            Accelerometer.Default.ReadingChanged += OnAccelReadingChanged;
+            Accelerometer.Default.ReadingChanged += OnAccelerometerReadingChanged;
             Accelerometer.Default.ShakeDetected += OnShakeDetected;
             Accelerometer.Default.Start(SensorSpeed.UI);
-            _accelActive = true;
+            _isAccelerometerActive = true;
 
-            if (AccelChip != null)
-            {
-                AccelChip.IsVisible = true;
-            }
+            SetVisible(AccelChip, true);
             SetState("Listening", "Accelerometer", "Streaming X/Y/Z");
         }
 
@@ -497,35 +349,27 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private void StopAccelerometer()
         {
-            if (!_accelActive)
-            {
+            if (!_isAccelerometerActive)
                 return;
-            }
 
-            Accelerometer.Default.ReadingChanged -= OnAccelReadingChanged;
+            Accelerometer.Default.ReadingChanged -= OnAccelerometerReadingChanged;
             Accelerometer.Default.ShakeDetected -= OnShakeDetected;
             Accelerometer.Default.Stop();
-            _accelActive = false;
+            _isAccelerometerActive = false;
 
-            if (AccelChip != null)
-            {
-                AccelChip.IsVisible = false;
-            }
+            SetVisible(AccelChip, false);
             SetState("Stopped", "Accelerometer");
         }
 
         /// <summary>
         /// Updates the accelerometer label with formatted X/Y/Z values on the UI thread.
         /// </summary>
-        private void OnAccelReadingChanged(object? sender, AccelerometerChangedEventArgs e)
+        private void OnAccelerometerReadingChanged(object? sender, AccelerometerChangedEventArgs e)
         {
             var a = e.Reading.Acceleration;
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (AccelLabel != null)
-                {
-                    AccelLabel.Text = $"X {a.X:F2}  Y {a.Y:F2}  Z {a.Z:F2}";
-                }
+                SetText(AccelLabel, $"X {a.X:F2}  Y {a.Y:F2}  Z {a.Z:F2}");
             });
         }
 
@@ -536,10 +380,7 @@ namespace NativeFeaturesMAUI
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (ShakeLabel != null)
-                {
-                    ShakeLabel.Text = "Shake: detected";
-                }
+                SetText(ShakeLabel, "Shake: detected");
                 SetState("Success", "Shake", "User shook the device");
             });
         }
@@ -549,14 +390,10 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private void OnCompassClicked(object sender, EventArgs e)
         {
-            if (!_compassActive)
-            {
+            if (!_isCompassActive)
                 StartCompass();
-            }
             else
-            {
                 StopCompass();
-            }
         }
 
         /// <summary>
@@ -573,12 +410,9 @@ namespace NativeFeaturesMAUI
 
             Compass.Default.ReadingChanged += OnCompassReadingChanged;
             Compass.Default.Start(SensorSpeed.UI);
-            _compassActive = true;
+            _isCompassActive = true;
 
-            if (CompassChip != null)
-            {
-                CompassChip.IsVisible = true;
-            }
+            SetVisible(CompassChip, true);
             SetState("Listening", "Compass", "Heading streaming");
         }
 
@@ -588,19 +422,14 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private void StopCompass()
         {
-            if (!_compassActive)
-            {
+            if (!_isCompassActive)
                 return;
-            }
 
             Compass.Default.ReadingChanged -= OnCompassReadingChanged;
             Compass.Default.Stop();
-            _compassActive = false;
+            _isCompassActive = false;
 
-            if (CompassChip != null)
-            {
-                CompassChip.IsVisible = false;
-            }
+            SetVisible(CompassChip, false);
             SetState("Stopped", "Compass");
         }
 
@@ -612,10 +441,7 @@ namespace NativeFeaturesMAUI
             var heading = e.Reading.HeadingMagneticNorth;
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                if (CompassLabel != null)
-                {
-                    CompassLabel.Text = $"Heading: {heading:F0}°";
-                }
+                SetText(CompassLabel, $"Heading: {heading:F0}°");
             });
         }
 
@@ -638,6 +464,17 @@ namespace NativeFeaturesMAUI
             Connectivity.ConnectivityChanged -= OnConnectivityChanged;
             StopAccelerometer();
             StopCompass();
+        }
+
+        // Helpers
+        private static void SetVisible(VisualElement? element, bool isVisible)
+        {
+            if (element is not null) element.IsVisible = isVisible;
+        }
+
+        private static void SetText(Label? label, string text)
+        {
+            if (label is not null) label.Text = text;
         }
     }
 

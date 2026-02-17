@@ -38,8 +38,11 @@
 
         <!-- Icon text style -->
         <Style TargetType="Label" x:Key="IconLabel">
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="TextColor"
+            Value="{AppThemeBinding Light={StaticResource PrimaryTextLight},
+                                     Dark={StaticResource PrimaryTextDark}}" />
         </Style>
 
         <!-- Title / subtitle labels in each card -->
@@ -209,14 +212,14 @@
 
                     <!-- Status chips -->
                     <HorizontalStackLayout Grid.Row="1" Spacing="8">
-                        <Border StrokeThickness="0" BackgroundColor="#EEF2FF" StrokeShape="RoundRectangle 10">
-                            <Label x:Name="ChipLastAction" Text="—" Padding="10,4" TextColor="#3730A3" />
+                        <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#EEF2FF, Dark={StaticResource Gray900}}" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipLastAction" Text="—" Padding="10,4" TextColor="{AppThemeBinding Light=#3730A3, Dark={StaticResource White}}" />
                         </Border>
-                        <Border StrokeThickness="0" BackgroundColor="#ECFDF5" StrokeShape="RoundRectangle 10">
-                            <Label x:Name="ChipState" Text="Ready" Padding="10,4" TextColor="#065F46" />
+                        <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#ECFDF5, Dark={StaticResource Gray900}}" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipState" Text="Ready" Padding="10,4" TextColor="{AppThemeBinding Light=#065F46, Dark={StaticResource White}}" />
                         </Border>
-                        <Border StrokeThickness="0" BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 10">
-                            <Label x:Name="ChipTime" Text="—" Padding="10,4" TextColor="#9A3412" />
+                        <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#FFF7ED, Dark={StaticResource Gray900}}" StrokeShape="RoundRectangle 10">
+                            <Label x:Name="ChipTime" Text="—" Padding="10,4" TextColor="{AppThemeBinding Light=#9A3412, Dark={StaticResource White}}" />
                         </Border>
                     </HorizontalStackLayout>
 
@@ -225,20 +228,20 @@
                            TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
 
                     <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="12">
-                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F1F5F9" StrokeThickness="0"
+                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#F1F5F9, Dark={StaticResource Gray950}}" StrokeThickness="0"
                                 StrokeShape="RoundRectangle 8" Padding="10,8" IsVisible="False" x:Name="FileChip">
                             <HorizontalStackLayout Spacing="6">
                                 <Label Text="📁" />
-                                <Label x:Name="FileNameLabel" Text="No file" />
+                                <Label x:Name="FileNameLabel" Text="No file" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}" />
                             </HorizontalStackLayout>
                         </Border>
 
                         <!-- Row 0: Location summary -->
-                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#F1F5F9" StrokeThickness="0"
+                        <Border Grid.Row="0" Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#F1F5F9, Dark={StaticResource Gray950}}" StrokeThickness="0"
         StrokeShape="RoundRectangle 8" Padding="10,8" IsVisible="False" x:Name="LocationChip">
                             <HorizontalStackLayout Spacing="6">
                                 <Label Text="📍"/>
-                                <Label x:Name="LocationLabel" FontSize="12" />
+                                <Label x:Name="LocationLabel" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}" />
                             </HorizontalStackLayout>
                         </Border>
 
@@ -250,38 +253,38 @@
 
                         <!-- Network chip -->
                         <Border Grid.Row="1" Grid.Column="0"
-        Margin="0,6,0,0"
-        BackgroundColor="#EEF2FF" StrokeThickness="0"
+        Margin="0,6,0,0" 
+        BackgroundColor="{AppThemeBinding Light=#EEF2FF, Dark={StaticResource Gray900}}" StrokeThickness="0"
         StrokeShape="RoundRectangle 8" Padding="10,8"
         x:Name="NetworkChip" IsVisible="True">
                             <HorizontalStackLayout Spacing="6">
                                 <Label Text="📶"/>
-                                <Label x:Name="NetworkLabel" Text="Checking network…"/>
+                                <Label x:Name="NetworkLabel" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}" Text="Checking network…"/>
                             </HorizontalStackLayout>
                         </Border>
 
                         <!-- Accelerometer chip -->
                         <Border Grid.Row="1" Grid.Column="1"
         Margin="0,6,0,0"
-        BackgroundColor="#ECFDF5" StrokeThickness="0"
+        BackgroundColor="{AppThemeBinding Light=#ECFDF5, Dark={StaticResource Gray900}}" StrokeThickness="0"
         StrokeShape="RoundRectangle 8" Padding="10,8"
         x:Name="AccelChip" IsVisible="False">
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="📈 Accelerometer" FontAttributes="Bold" FontSize="12"/>
-                                <Label x:Name="AccelLabel" FontSize="12" Text="X 0.00  Y 0.00  Z 0.00"/>
-                                <Label x:Name="ShakeLabel" FontSize="12" Text="Shake: —"/>
+                                <Label Text="📈 Accelerometer" FontAttributes="Bold" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+                                <Label x:Name="AccelLabel" FontSize="12" Text="X 0.00  Y 0.00  Z 0.00" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+                                <Label x:Name="ShakeLabel" FontSize="12" Text="Shake: —" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
                             </VerticalStackLayout>
                         </Border>
 
                         <!-- Compass chip -->
                         <Border Grid.Row="1" Grid.Column="2"
         Margin="0,6,0,0"
-        BackgroundColor="#FFF7ED" StrokeThickness="0"
+        BackgroundColor="{AppThemeBinding Light=#FFF7ED, Dark={StaticResource Gray900}}" StrokeThickness="0"
         StrokeShape="RoundRectangle 8" Padding="10,8"
         x:Name="CompassChip" IsVisible="False">
                             <VerticalStackLayout Spacing="2">
-                                <Label Text="🧭 Compass" FontAttributes="Bold" FontSize="12"/>
-                                <Label x:Name="CompassLabel" FontSize="12" Text="Heading: —°"/>
+                                <Label Text="🧭 Compass" FontAttributes="Bold" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
+                                <Label x:Name="CompassLabel" FontSize="12" Text="Heading: —°" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
@@ -296,7 +299,7 @@
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border StrokeThickness="0" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 8" Padding="8">
+                                    <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark={StaticResource Gray900}}" StrokeShape="RoundRectangle 8" Padding="8">
                                         <Label Text="{Binding}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource SecondaryTextLight}, Dark={StaticResource SecondaryTextDark}}"/>
                                     </Border>
                                 </DataTemplate>
