@@ -66,9 +66,9 @@ namespace NativeFeaturesMAUI
                     });
                 });
             }
-            catch
+            catch(Exception ex)
             {
-                // suppress
+                System.Diagnostics.Debug.WriteLine($"[ToastService iOS] ShowAsync failed: {ex}");
             }
 
             return Task.CompletedTask;

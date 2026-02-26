@@ -19,14 +19,11 @@ namespace NativeFeaturesMAUI
 
 #if ANDROID
             builder.Services.AddSingleton<IToastService, AndroidToastService>();
-#elif IOS
-            builder.Services.AddSingleton<IToastService, ToastService>();
-#elif MACCATALYST
+#elif IOS || MACCATALYST
             builder.Services.AddSingleton<IToastService, ToastService>();
 #elif WINDOWS
             builder.Services.AddSingleton<IToastService, WindowsToastService>();
 #endif
-
 
 #if DEBUG
             builder.Logging.AddDebug();

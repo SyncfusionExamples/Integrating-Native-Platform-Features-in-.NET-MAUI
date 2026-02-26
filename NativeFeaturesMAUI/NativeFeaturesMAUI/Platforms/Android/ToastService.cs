@@ -35,7 +35,7 @@ namespace NativeFeaturesMAUI
                 .SetAutoCancel(true);
 
             var nmCompat = NotificationManagerCompat.From(context);
-            var notification = builder.Build();
+            var notification = builder?.Build();
             if (nmCompat is not null)
             {
                 nmCompat.Notify(Random.Shared.Next(), notification);

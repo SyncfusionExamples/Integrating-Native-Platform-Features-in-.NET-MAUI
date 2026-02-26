@@ -70,6 +70,15 @@ public partial class MainPage : ContentPage
 
 Inside platform folders you can use native namespaces for more complex features.
 
+### Windows
+
+```csharp
+using Windows.Devices.Geolocation;
+using Windows.Media.Capture;
+using Windows.Storage;
+using Windows.UI.Popups;
+```
+
 ### Android
 
 ```csharp
@@ -77,14 +86,34 @@ using Android.Hardware;
 using Android.Content;
 ```
 
-### iOS
+### MacCatalaysts and iOS
 
 ```csharp
-using CoreLocation;
+using UIKit;
 using Foundation;
+using CoreGraphics;
+using AVFoundation;
 ```
 
 ## Handling permissions
+
+### Windows
+
+Edit Platforms/Windows/Package.appxmanifest under <Capabilities>:
+
+```xml
+<Capabilities>
+    <DeviceCapability Name="webcam" />
+</Capabilities>
+```
+
+Additional device capabilities:
+```xml
+<DeviceCapability Name="microphone" />
+<DeviceCapability Name="location" />
+<DeviceCapability Name="picturesLibrary" />
+<DeviceCapability Name="videosLibrary" />
+```
 
 ### Android
 
@@ -93,8 +122,26 @@ Edit `Platforms/Android/AndroidManifest.xml`:
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 ```
-
 Add other permissions as needed per feature.
+
+### Mac Catalyst
+
+Mac Catalyst also uses Info.plist, the same as iOS.
+Edit Platforms/MacCatalyst/Info.plist:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Camera access is required on Mac.</string>
+```
+Additional Permissions:
+
+```xml
+<key>NSMicrophoneUsageDescription</key>
+<string>Microphone access is required on Mac.</string>
+
+<key>NSLocationUsageDescription</key>
+<string>Location access is required on Mac.</string>
+```
 
 ### iOS
 
@@ -120,20 +167,6 @@ Add usage descriptions for each required capability.
 1. Add `.framework` under `Platforms/iOS`.
 2. Configure `AppDelegate.cs` or project settings as needed.
 3. Expose SDK functionality through shared interfaces or services.
-
-## Conditional compilation
-
-When small platform‑specific branches are needed, use directives:
-
-```csharp
-#if ANDROID
-    // Android logic
-#elif IOS
-    // iOS logic
-#endif
-```
-
-Use sparingly; prefer the interface or partial class patterns for larger features.
 
 ## Best practices
 

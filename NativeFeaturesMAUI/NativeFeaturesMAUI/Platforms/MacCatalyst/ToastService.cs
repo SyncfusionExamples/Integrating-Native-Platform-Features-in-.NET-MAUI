@@ -63,9 +63,9 @@ namespace NativeFeaturesMAUI
                     });
                 });
             }
-            catch
+            catch(Exception ex)
             {
-                // ignore
+                System.Diagnostics.Debug.WriteLine($"[ToastService MAC] ShowAsync failed: {ex}");
             }
 
             return Task.CompletedTask;
