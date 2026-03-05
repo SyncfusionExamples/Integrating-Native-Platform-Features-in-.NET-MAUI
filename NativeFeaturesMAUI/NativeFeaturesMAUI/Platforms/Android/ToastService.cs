@@ -18,30 +18,27 @@ namespace NativeFeaturesMAUI
         /// Ensures the channel exists on Android 8.0+ before posting.
         /// </summary>
         /// <param name="message">The message to display. Null is treated as empty.</param>
-        public Task ShowAsync(string message)
+        public async Task ShowAsync(string message)
         {
             var context = Android.App.Application.Context;
             if (context is null)
-            {
-                return Task.CompletedTask;
-            }
+                return;
 
             EnsureChannel(context);
             var safeMessage = message ?? string.Empty;
-            var builder = new NotificationCompat.Builder(context, ChannelId)
+            var builder = new NotificationCompat.Builder(context!, ChannelId)
                 .SetContentTitle("Notification")
                 .SetContentText(safeMessage)
                 .SetSmallIcon(Android.Resource.Drawable.StatNotifyMore)
                 .SetAutoCancel(true);
-
             var nmCompat = NotificationManagerCompat.From(context);
-            var notification = builder?.Build();
+            var notification = builder.Build()!;
             if (nmCompat is not null)
             {
                 nmCompat.Notify(Random.Shared.Next(), notification);
             }
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         /// <summary>

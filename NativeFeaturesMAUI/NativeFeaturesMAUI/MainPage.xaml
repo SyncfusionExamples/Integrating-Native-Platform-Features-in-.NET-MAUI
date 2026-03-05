@@ -82,7 +82,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Open the native camera" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnTakePhotoClicked"/>
+                        <TapGestureRecognizer Command="{Binding TakePhotoCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -95,7 +95,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="System file picker" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnPickFileClicked"/>
+                        <TapGestureRecognizer Command="{Binding PickFileCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -108,7 +108,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Latitude longitude" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnGetLocationClicked"/>
+                        <TapGestureRecognizer Command="{Binding GetLocationCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -121,7 +121,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Haptic feedback" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnVibrateClicked"/>
+                        <TapGestureRecognizer Command="{Binding VibrateCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -134,7 +134,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Platform-specific UI" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnToastClicked"/>
+                        <TapGestureRecognizer Command="{Binding ToastCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -147,7 +147,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="From native API" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDeviceModelClicked"/>
+                        <TapGestureRecognizer Command="{Binding DeviceModelCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -160,7 +160,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Read via platform code" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnOrientationClicked"/>
+                        <TapGestureRecognizer Command="{Binding OrientationCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -172,7 +172,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Online / Profile" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnNetworkClicked"/>
+                        <TapGestureRecognizer Command="{Binding NetworkCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -184,7 +184,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Start / Stop readings" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnAccelerometerClicked"/>
+                        <TapGestureRecognizer Command="{Binding AccelerometerToggleCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
 
@@ -196,7 +196,7 @@
                         <Label Grid.Row="1" Grid.Column="1" Text="Heading (°)" Style="{StaticResource CardSubtitle}"/>
                     </Grid>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnCompassClicked"/>
+                        <TapGestureRecognizer Command="{Binding CompassToggleCommand}"/>
                     </Border.GestureRecognizers>
                 </Border>
             </FlexLayout>

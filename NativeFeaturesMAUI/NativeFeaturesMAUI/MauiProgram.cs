@@ -16,6 +16,8 @@ namespace NativeFeaturesMAUI
                 });
 
             builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
+            builder.Services.AddSingleton<NativeFeaturesMAUI.Services.ILocationService, NativeFeaturesMAUI.Services.LocationService>();
+            builder.Services.AddSingleton<NativeFeaturesMAUI.MainPageViewModel>();
 
 #if ANDROID
             builder.Services.AddSingleton<IToastService, AndroidToastService>();

@@ -14,7 +14,7 @@ namespace NativeFeaturesMAUI
         /// Ensures UI operations are dispatched on the main thread and honors the safe area.
         /// </summary>
         /// <param name="message">The text content to display in the toast.</param>
-        public Task ShowAsync(string message)
+        public async Task ShowAsync(string message)
         {
             try
             {
@@ -53,8 +53,9 @@ namespace NativeFeaturesMAUI
                     window.AddSubview(toastLabel);
                     UIView.Animate(0.25, () => toastLabel.Alpha = 1.0f, () =>
                     {
-                        Task.Delay(1800).ContinueWith(_ =>
+                        var _ = Task.Run(async () =>
                         {
+                            await Task.Delay(1800);
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
                                 UIView.Animate(0.25, () => toastLabel.Alpha = 0f, () => toastLabel.RemoveFromSuperview());
@@ -68,7 +69,7 @@ namespace NativeFeaturesMAUI
                 System.Diagnostics.Debug.WriteLine($"[ToastService MAC] ShowAsync failed: {ex}");
             }
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

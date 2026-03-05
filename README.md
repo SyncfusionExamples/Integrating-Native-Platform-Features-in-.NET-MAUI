@@ -177,6 +177,10 @@ Add usage descriptions for each required capability.
 * Handle runtime permissions carefully and verify manifest or plist entries.
 * Register handler customizations early in startup.
 
+## Screenshort
+
+![Native Features](NativeFeatures.gif)
+
 ## Troubleshooting
 
 | Issue | Action |
