@@ -1,4 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Networking;
+using Microsoft.Extensions.DependencyInjection;
+using NativeFeaturesMAUI;
+using NativeFeaturesMAUI.Services;
+
 
 namespace NativeFeaturesMAUI
 {
@@ -15,16 +20,20 @@ namespace NativeFeaturesMAUI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddSingleton<IConnectivity>(Connectivity.Current);
-            builder.Services.AddSingleton<NativeFeaturesMAUI.Services.ILocationService, NativeFeaturesMAUI.Services.LocationService>();
-            builder.Services.AddSingleton<NativeFeaturesMAUI.MainPageViewModel>();
+            builder.Services.AddSingleton<IConnectivity>(_ => Connectivity.Current);
+            builder.Services.AddSingleton<ILocationService, LocationService>();
+            builder.Services.AddSingleton<MainPageViewModel>();
 
 #if ANDROID
             builder.Services.AddSingleton<IToastService, AndroidToastService>();
-#elif IOS || MACCATALYST
+#elif IOS
+            builder.Services.AddSingleton<IToastService, ToastService>();
+#elif MACCATALYST
             builder.Services.AddSingleton<IToastService, ToastService>();
 #elif WINDOWS
             builder.Services.AddSingleton<IToastService, WindowsToastService>();
+#else
+            builder.Services.AddSingleton<IToastService, NullToastService>();
 #endif
 
 #if DEBUG
@@ -33,5 +42,13 @@ namespace NativeFeaturesMAUI
 
             return builder.Build();
         }
+    }
+
+    /// <summary>
+    /// Optional: a no-op implementation used as a safe fallback.
+    /// </summary>
+    public sealed class NullToastService : IToastService
+    {
+        public void Show(string message) {}
     }
 }

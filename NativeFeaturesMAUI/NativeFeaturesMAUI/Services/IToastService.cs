@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 namespace NativeFeaturesMAUI
 {
     /// <summary>
-    /// Provides functionality to display toast notifications asynchronously.
+    /// Provides functionality to display toast notifications.
     /// </summary>
     public interface IToastService
     {
-        Task ShowAsync(string message);
+        void Show(string message);
     }
 }

@@ -208,17 +208,19 @@ namespace NativeFeaturesMAUI
         /// Shows a native toast notification with a predefined title and the provided message. Handles errors gracefully and logs the outcome.
         /// </summary>
         /// <returns></returns>
-        public async Task ShowToastAsync()
+        public Task ShowToastAsync()
         {
             try
             {
-                await _toast.ShowAsync("Hello from native UI!");
+                _toast.Show("Hello from native UI!"); // fire-and-forget
                 Log("Success", "Toast / Alert", "System notification posted.");
             }
             catch (Exception ex)
             {
                 Log("Error", "Toast / Alert", ex.Message);
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>

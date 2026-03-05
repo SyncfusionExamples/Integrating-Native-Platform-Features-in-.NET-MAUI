@@ -13,16 +13,15 @@ namespace NativeFeaturesMAUI
         /// Shows a lightweight toast with a static title ("Notification") and the provided message text.
         /// </summary>
         /// <param name="message">The message body to display; null is treated as an empty string.</param>
-        public async Task ShowAsync(string message)
+        public void Show(string message)
         {
             var safeMessage = message ?? string.Empty;
             var toast = new AppNotificationBuilder()
                 .AddText("Notification")
                 .AddText(safeMessage)
                 .BuildNotification();
-            AppNotificationManager.Default.Show(toast);
 
-            await Task.CompletedTask;
+            AppNotificationManager.Default.Show(toast);
         }
     }
 }
