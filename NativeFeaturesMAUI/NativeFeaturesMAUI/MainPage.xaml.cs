@@ -86,13 +86,7 @@ namespace NativeFeaturesMAUI
                 SetText(Output, detail!);
             }
 
-            var entry = $"{DateTime.Now:HH:mm:ss} • {action} → {state}{(string.IsNullOrEmpty(detail) ? "" : $" · {detail}")}";
-            _viewModel?.EventLog.Insert(0, entry);
-
-            while (_viewModel is not null && _viewModel.EventLog.Count > 8)
-            {
-                _viewModel.EventLog.RemoveAt(_viewModel.EventLog.Count - 1);
-            }
+            // Event logging is handled by the view model; avoid adding duplicate entries here.
         }
 
         /// <summary>

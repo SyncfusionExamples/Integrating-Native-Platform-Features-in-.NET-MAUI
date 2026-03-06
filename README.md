@@ -4,169 +4,37 @@
 
 This blog shows how to use basic native features in a .NET MAUI app without writing separate code for each platform. It includes small examples for getting the device model, using platform‑specific services, handling permissions, and accessing native APIs through simple interfaces. The goal is to help you understand how to connect shared MAUI code with Android, iOS, Windows, or macOS features in a clear and easy way.
 
-## Interface and Dependency Injection
+## Understand What’s Built‑In to MAUI
 
-### 1) Define interface in shared code
+.NET MAUI provides built‑in APIs (via Microsoft.Maui.Essentials) that let you use native device features directly from shared C# code:
 
-```csharp
-// Services/IDeviceService.cs
-public interface IDeviceService
-{
-    string GetDeviceModel();
-}
-```
+* MediaPicker → Camera
+* FilePicker → File selection
+* Geolocation → Location/GPS
+* Connectivity → Internet status
+* Accelerometer, Compass → Motion & direction sensors
+* Vibration, Haptics → Feedback
 
-### 2) Android implementation
+No duplicate platform projects or bindings are required.
 
-```csharp
-// Platforms/Android/DeviceService.cs
-using Android.OS;
+## Step‑by‑Step Feature Implementations
 
-public class DeviceService : IDeviceService
-{
-    public string GetDeviceModel()
-    {
-        return Build.Model;
-    }
-}
-```
+The blog covers:
 
-### 3) iOS implementation
+* Camera (capture photos)
+* File Picker (attach files)
+* Location (GPS)
+* Connectivity (online/offline handling)
+* Sensors (accelerometer & compass)
+* Haptics & Toast (feedback system)
 
-```csharp
-// Platforms/iOS/DeviceService.cs
-using UIKit;
+## Platform Permissions Explained Clearly
 
-public class DeviceService : IDeviceService
-{
-    public string GetDeviceModel()
-    {
-        return UIDevice.CurrentDevice.Model;
-    }
-}
-```
+The blog shows all required permissions:
 
-### 4) Register service
-
-```csharp
-// MauiProgram.cs
-builder.Services.AddSingleton<IDeviceService, DeviceService>();
-```
-
-### 5) Consume in UI or elsewhere
-
-```csharp
-public partial class MainPage : ContentPage
-{
-    public MainPage(IDeviceService deviceService)
-    {
-        InitializeComponent();
-        deviceLabel.Text = deviceService.GetDeviceModel();
-    }
-}
-```
-
-## Access native APIs directly
-
-Inside platform folders you can use native namespaces for more complex features.
-
-### Windows
-
-```csharp
-using Windows.Devices.Geolocation;
-using Windows.Media.Capture;
-using Windows.Storage;
-using Windows.UI.Popups;
-```
-
-### Android
-
-```csharp
-using Android.Hardware;
-using Android.Content;
-```
-
-### MacCatalaysts and iOS
-
-```csharp
-using UIKit;
-using Foundation;
-using CoreGraphics;
-using AVFoundation;
-```
-
-## Handling permissions
-
-### Windows
-
-Edit Platforms/Windows/Package.appxmanifest under <Capabilities>:
-
-```xml
-<Capabilities>
-    <DeviceCapability Name="webcam" />
-</Capabilities>
-```
-
-Additional device capabilities:
-```xml
-<DeviceCapability Name="microphone" />
-<DeviceCapability Name="location" />
-<DeviceCapability Name="picturesLibrary" />
-<DeviceCapability Name="videosLibrary" />
-```
-
-### Android
-
-Edit `Platforms/Android/AndroidManifest.xml`:
-
-```xml
-<uses-permission android:name="android.permission.CAMERA" />
-```
-Add other permissions as needed per feature.
-
-### Mac Catalyst
-
-Mac Catalyst also uses Info.plist, the same as iOS.
-Edit Platforms/MacCatalyst/Info.plist:
-
-```xml
-<key>NSCameraUsageDescription</key>
-<string>Camera access is required on Mac.</string>
-```
-Additional Permissions:
-
-```xml
-<key>NSMicrophoneUsageDescription</key>
-<string>Microphone access is required on Mac.</string>
-
-<key>NSLocationUsageDescription</key>
-<string>Location access is required on Mac.</string>
-```
-
-### iOS
-
-Edit `Platforms/iOS/Info.plist`:
-
-```xml
-<key>NSCameraUsageDescription</key>
-<string>Camera access is required.</string>
-```
-
-Add usage descriptions for each required capability.
-
-## Integrating native SDKs
-
-### Android
-
-1. Add `.aar` or `.jar` file under `Platforms/Android`.
-2. Configure `MainActivity.cs` or Gradle settings if required.
-3. Wrap SDK calls via an interface to keep shared code clean.
-
-### iOS
-
-1. Add `.framework` under `Platforms/iOS`.
-2. Configure `AppDelegate.cs` or project settings as needed.
-3. Expose SDK functionality through shared interfaces or services.
+Android Manifest permissions
+iOS / macOS Info.plist keys
+And when to request permissions at runtime in MAUI
 
 ## Best practices
 

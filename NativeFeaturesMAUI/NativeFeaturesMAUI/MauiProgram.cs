@@ -21,17 +21,12 @@ namespace NativeFeaturesMAUI
                 });
 
             builder.Services.AddSingleton<IConnectivity>(_ => Connectivity.Current);
+
             builder.Services.AddSingleton<ILocationService, LocationService>();
             builder.Services.AddSingleton<MainPageViewModel>();
 
-#if ANDROID
-            builder.Services.AddSingleton<IToastService, AndroidToastService>();
-#elif IOS
+#if ANDROID || IOS || MACCATALYST || WINDOWS
             builder.Services.AddSingleton<IToastService, ToastService>();
-#elif MACCATALYST
-            builder.Services.AddSingleton<IToastService, ToastService>();
-#elif WINDOWS
-            builder.Services.AddSingleton<IToastService, WindowsToastService>();
 #else
             builder.Services.AddSingleton<IToastService, NullToastService>();
 #endif
