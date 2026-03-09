@@ -1,20 +1,22 @@
 namespace NativeFeaturesMAUI
 {
-#if ANDROID
-    using Android.Widget;
-#endif
-#if IOS || MACCATALYST
-    using UIKit;
-    using System.Linq;
-#endif
 #if MACCATALYST
-    using CoreGraphics;
-#endif
-#if WINDOWS
-    using Microsoft.Windows.AppNotifications;
-    using Microsoft.Windows.AppNotifications.Builder;
-#endif
+using CoreGraphics;
+using UIKit;
+using System.Linq;
 
+#elif IOS
+using UIKit;
+using System.Linq;
+
+#elif ANDROID
+    using Android.Widget;
+
+#elif WINDOWS
+using Microsoft.Windows.AppNotifications;
+using Microsoft.Windows.AppNotifications.Builder;
+
+#endif
     /// <summary>
     /// ToastService provides a simple, cross-platform way to display short notifications or "toasts" to the user. It abstracts away platform-specific APIs to offer a unified interface for showing transient messages. The implementation uses native mechanisms on each platform to ensure a consistent user experience, while gracefully degrading on unsupported platforms.
     /// </summary>
@@ -120,7 +122,10 @@ namespace NativeFeaturesMAUI
 
             AppNotificationManager.Default.Show(toast);
 #else
-            // No-op on unsupported platforms
+            // Fallback for unknown/unsupported platforms
+            var safeFallback = message ?? string.Empty;
+            System.Diagnostics.Debug.WriteLine($"[ToastService] (Unsupported platform) {safeFallback}");
+
 #endif
         }
     }

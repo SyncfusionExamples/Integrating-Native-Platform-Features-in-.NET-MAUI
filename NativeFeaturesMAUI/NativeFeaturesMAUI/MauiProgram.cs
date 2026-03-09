@@ -21,15 +21,9 @@ namespace NativeFeaturesMAUI
                 });
 
             builder.Services.AddSingleton<IConnectivity>(_ => Connectivity.Current);
-
             builder.Services.AddSingleton<ILocationService, LocationService>();
             builder.Services.AddSingleton<MainPageViewModel>();
-
-#if ANDROID || IOS || MACCATALYST || WINDOWS
             builder.Services.AddSingleton<IToastService, ToastService>();
-#else
-            builder.Services.AddSingleton<IToastService, NullToastService>();
-#endif
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -37,13 +31,5 @@ namespace NativeFeaturesMAUI
 
             return builder.Build();
         }
-    }
-
-    /// <summary>
-    /// Optional: a no-op implementation used as a safe fallback.
-    /// </summary>
-    public sealed class NullToastService : IToastService
-    {
-        public void Show(string message) {}
     }
 }

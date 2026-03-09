@@ -253,10 +253,10 @@
 
                         <!-- Network chip -->
                         <Border Grid.Row="1" Grid.Column="0"
-        Margin="0,6,0,0" 
-        BackgroundColor="{AppThemeBinding Light=#EEF2FF, Dark={StaticResource Gray900}}" StrokeThickness="0"
-        StrokeShape="RoundRectangle 8" Padding="10,8"
-        x:Name="NetworkChip" IsVisible="True">
+                                Margin="0,6,0,0" 
+                                BackgroundColor="{AppThemeBinding Light=#EEF2FF, Dark={StaticResource Gray900}}" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8" Padding="10,8"
+                                x:Name="NetworkChip" IsVisible="True">
                             <HorizontalStackLayout Spacing="6">
                                 <Label Text="📶"/>
                                 <Label x:Name="NetworkLabel" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}" Text="Checking network…"/>
@@ -265,10 +265,10 @@
 
                         <!-- Accelerometer chip -->
                         <Border Grid.Row="1" Grid.Column="1"
-        Margin="0,6,0,0"
-        BackgroundColor="{AppThemeBinding Light=#ECFDF5, Dark={StaticResource Gray900}}" StrokeThickness="0"
-        StrokeShape="RoundRectangle 8" Padding="10,8"
-        x:Name="AccelChip" IsVisible="False">
+                                Margin="0,6,0,0"
+                                BackgroundColor="{AppThemeBinding Light=#ECFDF5, Dark={StaticResource Gray900}}" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8" Padding="10,8"
+                                x:Name="AccelChip" IsVisible="False">
                             <VerticalStackLayout Spacing="2">
                                 <Label Text="📈 Accelerometer" FontAttributes="Bold" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
                                 <Label x:Name="AccelLabel" FontSize="12" Text="X 0.00  Y 0.00  Z 0.00" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
@@ -278,10 +278,10 @@
 
                         <!-- Compass chip -->
                         <Border Grid.Row="1" Grid.Column="2"
-        Margin="0,6,0,0"
-        BackgroundColor="{AppThemeBinding Light=#FFF7ED, Dark={StaticResource Gray900}}" StrokeThickness="0"
-        StrokeShape="RoundRectangle 8" Padding="10,8"
-        x:Name="CompassChip" IsVisible="False">
+                                Margin="0,6,0,0"
+                                BackgroundColor="{AppThemeBinding Light=#FFF7ED, Dark={StaticResource Gray900}}" StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8" Padding="10,8"
+                                x:Name="CompassChip" IsVisible="False">
                             <VerticalStackLayout Spacing="2">
                                 <Label Text="🧭 Compass" FontAttributes="Bold" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>
                                 <Label x:Name="CompassLabel" FontSize="12" Text="Heading: —°" TextColor="{AppThemeBinding Light={StaticResource PrimaryTextLight}, Dark={StaticResource PrimaryTextDark}}"/>

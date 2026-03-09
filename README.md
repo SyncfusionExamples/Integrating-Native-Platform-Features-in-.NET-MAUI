@@ -58,6 +58,12 @@ And when to request permissions at runtime in MAUI
 | Native namespace or type not found | Ensure code is in correct platform folder. |
 | Handler customization not applied | Confirm registration order; place before app build. |
 
+### Path Too Long Exception
+
+If you are facing a path too long exception when building this example project, close Visual Studio and rename the repository to short and build the project.
+
+For a step-by-step procedure, refer to the link.
+
 ## Conclusion
 
 We hope this guide gave you a clearer picture of how native features can elevate your .NET MAUI applications. With simple APIs you can build apps that feel instantly responsive and naturally integrated with every device they run on. These capabilities help your application behave smarter, react faster, and deliver experiences that truly feel native on Android, iOS, Windows, and macOS.

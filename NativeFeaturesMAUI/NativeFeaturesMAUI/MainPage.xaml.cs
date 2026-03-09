@@ -68,7 +68,6 @@ namespace NativeFeaturesMAUI
             SetVisible(PhotoCard, false);
             SetVisible(FileChip, false);
             SetVisible(LocationChip, false);
-            _viewModel?.NetworkAsync();
         }
 
         /// <summary>
@@ -85,8 +84,6 @@ namespace NativeFeaturesMAUI
             {
                 SetText(Output, detail!);
             }
-
-            // Event logging is handled by the view model; avoid adding duplicate entries here.
         }
 
         /// <summary>
@@ -112,7 +109,10 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private static void SetVisible(VisualElement? element, bool isVisible)
         {
-            if (element is not null) element.IsVisible = isVisible;
+            if (element is not null)
+            {
+                element.IsVisible = isVisible;
+            }
         }
 
         /// <summary>
@@ -120,7 +120,10 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private static void SetText(Label? label, string text)
         {
-            if (label is not null) label.Text = text;
+            if (label is not null)
+            {
+                label.Text = text;
+            }
         }
     }
 }

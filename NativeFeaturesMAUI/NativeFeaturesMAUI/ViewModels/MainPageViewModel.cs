@@ -251,22 +251,7 @@ namespace NativeFeaturesMAUI
         /// <returns></returns>
         public Task NetworkAsync()
         {
-            var access = Connectivity.Current.NetworkAccess;
-            var profiles = Connectivity.Current.ConnectionProfiles;
-
-            string profileText = profiles.Contains(ConnectionProfile.WiFi) ? " · Wi‑Fi" :
-                                 profiles.Contains(ConnectionProfile.Cellular) ? " · Cellular" : string.Empty;
-
-            string status = access switch
-            {
-                NetworkAccess.Internet => "Online",
-                NetworkAccess.ConstrainedInternet => "Captive portal",
-                NetworkAccess.Local => "Local only",
-                NetworkAccess.None => "Offline",
-                _ => "Unknown"
-            };
-
-            var text = status + (status == "Online" ? profileText : string.Empty);
+            var text = GetNetworkStatusText();
             NetworkUpdated?.Invoke(text);
             Log("Info", "Network", text);
             return Task.CompletedTask;
@@ -296,6 +281,13 @@ namespace NativeFeaturesMAUI
         /// </summary>
         private void RefreshNetworkStatus()
         {
+            var text = GetNetworkStatusText();
+            NetworkUpdated?.Invoke(text);
+            Log("Info", "Network", text);
+        }
+
+        private string GetNetworkStatusText()
+        {
             var access = Connectivity.Current.NetworkAccess;
             var profiles = Connectivity.Current.ConnectionProfiles;
 
@@ -311,9 +303,7 @@ namespace NativeFeaturesMAUI
                 _ => "Unknown"
             };
 
-            var text = status + (status == "Online" ? profileText : string.Empty);
-            NetworkUpdated?.Invoke(text);
-            Log("Info", "Network", text);
+            return status + (status == "Online" ? profileText : string.Empty);
         }
 
         /// <summary>

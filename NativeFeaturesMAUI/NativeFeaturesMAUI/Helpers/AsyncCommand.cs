@@ -38,9 +38,9 @@ namespace NativeFeaturesMAUI.Helpers
             {
                 await _execute();
             }
-            catch
+            catch (Exception ex)
             {
-                
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
