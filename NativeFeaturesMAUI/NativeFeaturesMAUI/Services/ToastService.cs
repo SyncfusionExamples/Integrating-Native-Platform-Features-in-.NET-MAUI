@@ -121,11 +121,6 @@ using Microsoft.Windows.AppNotifications.Builder;
                 .BuildNotification();
 
             AppNotificationManager.Default.Show(toast);
-#else
-            // Fallback for unknown/unsupported platforms
-            var safeFallback = message ?? string.Empty;
-            System.Diagnostics.Debug.WriteLine($"[ToastService] (Unsupported platform) {safeFallback}");
-
 #endif
         }
     }
